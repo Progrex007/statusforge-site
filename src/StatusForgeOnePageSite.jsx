@@ -31,7 +31,7 @@ function Navbar() {
     <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/5">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <a href="#top" className="group inline-flex items-center gap-2">
-          <div className="h-7 w-7 rounded-md" style={{ backgroundColor: SF.gold }} />
+          <img src="/logo.png" alt="StatusForge Logo" className="h-7 w-7 rounded-md" />
           <span className="font-semibold tracking-tight text-white" style={{ fontFamily: 'Playfair Display, serif' }}>StatusForge</span>
         </a>
         <nav className="hidden items-center gap-8 md:flex">
@@ -184,10 +184,10 @@ function PackageCard({ title, price, period, bullets, cta = "Choose", featured =
 function Packages() {
   const starter = [
     "Personal brand website (1-page, hero carousel)",
-    "AI-Powered Personal Brand Audit (SF audit v1)",
+    "AI-Powered Personal Brand Audit",
     "14-Day AI Content Sprint (daily posts)",
-    "LinkedIn profile optimization",
-    "Instagram property carousels (designed templates)",
+    "Social Media profile optimization",
+    "Basic Web Discovery",
   ];
 
   const premium = [
@@ -231,7 +231,7 @@ function Packages() {
 
 function Testimonials() {
   return (
-    <section id="testimonials" className="py-16 sm:py-20 lg:py-24" style={{ backgroundColor: SF.paper }}>
+    <section id="testimonials" className="py-16 sm:py-20 lg:py-24" style={{ backgroundColor: '#ffffff' }}>
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs uppercase tracking-widest text-neutral-600">Results</p>
@@ -278,7 +278,7 @@ function Testimonials() {
 
 function About() {
   return (
-    <section id="about" className="border-t py-16 sm:py-20 lg:py-24" style={{ backgroundColor: SF.paper }}>
+    <section id="about" className="py-16 sm:py-20 lg:py-24" style={{ backgroundColor: '#ffffff' }}>
       <div className="mx-auto max-w-5xl px-6">
         <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
