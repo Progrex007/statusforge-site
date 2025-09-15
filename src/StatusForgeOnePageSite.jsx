@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 /**
@@ -26,6 +26,28 @@ const heroSlidesDefault = [
   { src: "/images/hero-2.jpg", alt: "Elegant interior with natural light", caption: "Built for South African pros" },
 ];
 
+/* === Load Fillout embed script once (no plugins) === */
+function FilloutScript() {
+  useEffect(() => {
+    if (!document.querySelector('script[src="https://server.fillout.com/embed/v1/"]')) {
+      const s = document.createElement("script");
+      s.src = "https://server.fillout.com/embed/v1/";
+      s.async = true;
+      document.body.appendChild(s);
+    }
+  }, []);
+  return null;
+}
+
+/* Reusable props for any "Get Started" popup button */
+const filloutAttrs = {
+  "data-fillout-id": "ifDkXUT9ygus",
+  "data-fillout-embed-type": "popup",
+  "data-fillout-dynamic-resize": "",
+  "data-fillout-inherit-parameters": "",
+  "data-fillout-popup-size": "medium",
+};
+
 function Navbar() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/5">
@@ -40,7 +62,15 @@ function Navbar() {
           <a href="#about" className="text-sm" style={{ color: SF.text }}>About</a>
           <a href="#contact" className="text-sm" style={{ color: SF.text }}>Contact</a>
         </nav>
-        <a href="#contact" className="hidden rounded-md px-4 py-2 text-sm font-medium md:inline-block" style={{ backgroundColor: SF.gold, color: "#0a0a0a" }}>Book a Call</a>
+        {/* Book a Call -> Get Started (direct Fillout popup trigger) */}
+        <button
+          type="button"
+          {...filloutAttrs}
+          className="hidden rounded-md px-4 py-2 text-sm font-medium md:inline-block"
+          style={{ backgroundColor: SF.gold, color: "#0a0a0a" }}
+        >
+          Get Started
+        </button>
       </div>
     </header>
   );
@@ -101,7 +131,13 @@ function Hero({ slides = heroSlidesDefault }) {
               </div>
               <div className="absolute bottom-3 right-4 flex gap-1.5">
                 {data.map((_, idx) => (
-                  <button key={idx} onClick={() => setI(idx)} aria-label={`Go to slide ${idx + 1}`} className="h-2.5 w-2.5 rounded-full border" style={{ backgroundColor: idx === i ? SF.gold : "rgba(255,255,255,0.6)", borderColor: idx === i ? SF.gold : "rgba(255,255,255,0.8)" }} />
+                  <button
+                    key={idx}
+                    onClick={() => setI(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className="h-2.5 w-2.5 rounded-full border"
+                    style={{ backgroundColor: idx === i ? SF.gold : "rgba(255,255,255,0.6)", borderColor: idx === i ? SF.gold : "rgba(255,255,255,0.8)" }}
+                  />
                 ))}
               </div>
             </div>
@@ -160,23 +196,76 @@ function Services() {
   );
 }
 
-function PackageCard({ title, price, period, bullets, cta = "Choose", featured = false }) {
+/* ==== Packages (ONLY change: center text on Premium & Ultra buttons) ==== */
+function PackageCard({ title, price, period, bullets, cta = "Choose", featured = false, whiteText = false }) {
+  const isGetStarted = cta === "Get Started";
+  const baseText = whiteText ? "#ffffff" : "#111111";
+  const subText = whiteText ? "#e5e5e5" : "#6b7280";
+
   return (
-    <div className={`relative rounded-2xl border p-6 shadow-sm ${featured ? 'ring-2 ring-[#eeb75d]' : ''}`} style={{ backgroundColor: featured ? 'rgba(238,183,93,0.07)' : '#ffffff', borderColor: featured ? 'rgba(238,183,93,0.4)' : '#e5e5e5' }}>
+    <div
+      className={`relative h-full rounded-2xl border p-6 shadow-sm ${featured ? "ring-2 ring-[#eeb75d]" : ""} flex flex-col`}
+      style={{
+        backgroundColor: featured ? "rgba(238,183,93,0.07)" : "#ffffff",
+        borderColor: featured ? "rgba(238,183,93,0.4)" : "#e5e5e5",
+        color: baseText,
+      }}
+    >
       {featured && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#eeb75d] px-3 py-1 text-xs font-semibold text-black">Most Popular</div>
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#eeb75d] px-3 py-1 text-xs font-semibold text-black">
+          Most Popular
+        </div>
       )}
-      <h3 className="text-xl font-semibold text-neutral-900" style={{ fontFamily: 'Playfair Display, serif' }}>{title}</h3>
+      <h3 className="text-xl font-semibold" style={{ fontFamily: "Playfair Display, serif", color: baseText }}>
+        {title}
+      </h3>
       <div className="mt-3 flex items-baseline gap-1">
-        <span className="text-3xl font-semibold text-neutral-900">{price}</span>
-        <span className="text-sm text-neutral-500">{period}</span>
+        <span className="text-3xl font-semibold" style={{ color: baseText }}>
+          {price}
+        </span>
+        {period ? (
+          <span className="text-sm" style={{ color: subText }}>
+            {period}
+          </span>
+        ) : null}
       </div>
-      <ul className="mt-4 space-y-2 text-sm text-neutral-700">
+
+      <ul className="mt-4 flex-1 space-y-2 text-sm" style={{ color: baseText }}>
         {bullets.map((b) => (
-          <li key={b} className="flex items-start gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5"><path d="M20 7L9 18l-5-5" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>{b}</li>
+          <li key={b} className="flex items-start gap-2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5">
+              <path
+                d="M20 7L9 18l-5-5"
+                stroke="#10b981"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            {b}
+          </li>
         ))}
       </ul>
-      <a href="#contact" className="mt-6 inline-block rounded-md px-4 py-2 text-sm font-semibold" style={{ backgroundColor: SF.gold, color: '#111' }}>{cta}</a>
+
+      {isGetStarted ? (
+        <button
+          type="button"
+          {...filloutAttrs}
+          className="mt-6 inline-block rounded-md px-4 py-2 text-sm font-semibold"
+          style={{ backgroundColor: SF.gold, color: "#111" }}
+        >
+          Get Started
+        </button>
+      ) : (
+        /* CHANGE APPLIES HERE: make anchor an inline-flex with centered text */
+        <a
+          href="#contact"
+          className="mt-6 inline-flex justify-center items-center rounded-md px-4 py-2 text-sm font-semibold text-center"
+          style={{ backgroundColor: SF.gold, color: "#111" }}
+        >
+          {cta}
+        </a>
+      )}
     </div>
   );
 }
@@ -184,7 +273,7 @@ function PackageCard({ title, price, period, bullets, cta = "Choose", featured =
 function Packages() {
   const starter = [
     "Personal brand website (1-page, hero carousel)",
-    "AI-Powered Personal Brand Audit",
+    "AI-Powered Personal Brand Audit ",
     "14-Day AI Content Sprint (daily posts)",
     "Social Media profile optimization",
     "Basic Web Discovery",
@@ -214,20 +303,46 @@ function Packages() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs uppercase tracking-widest text-neutral-500">Packages</p>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl" style={{ fontFamily: 'Playfair Display, serif' }}>
+          <h2
+            className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl"
+            style={{ fontFamily: "Playfair Display, serif" }}
+          >
             Pick your path to authority
           </h2>
-          <p className="mt-3 text-neutral-600">Starter → credible online. Premium → authority everywhere. Ultra → untouchable celebrity realtor.</p>
+          <p className="mt-3 text-neutral-600">
+            Starter → credible online. Premium → authority everywhere. Ultra → untouchable celebrity realtor.
+          </p>
         </div>
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          <PackageCard title="Starter – Credible Online" price="R2,500" period="once-off" bullets={starter} cta="Get Started" />
-          <PackageCard title="Premium – Authority Everywhere" price="R6,500" period="per month" bullets={premium} featured cta="Enroll Premium" />
-          <PackageCard title="Ultra-Prestige – Untouchable Authority" price="R15,000" period="per month" bullets={ultra} cta="Apply for Ultra" />
+          <PackageCard
+            title="Starter – Credible Online"
+            price="R2,500"
+            period="once-off"
+            bullets={starter}
+            cta="Get Started"
+          />
+          <PackageCard
+            title="Premium – Authority Everywhere"
+            price="R6,500"
+            period="per month"
+            bullets={premium}
+            featured
+            cta="Enroll Premium"
+            whiteText
+          />
+          <PackageCard
+            title="Ultra-Prestige – Untouchable Authority"
+            price="By Invite Only"
+            period=""
+            bullets={ultra}
+            cta="Apply for Ultra"
+          />
         </div>
       </div>
     </section>
   );
 }
+/* ==== End Packages ==== */
 
 function Testimonials() {
   return (
@@ -338,6 +453,7 @@ function Contact() {
 function Footer() {
   return (
     <footer className="border-t border-white/10" style={{ backgroundColor: SF.bg }}>
+      {/* Note: per your request, the bottom Get Started button was removed */}
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row">
         <p className="text-xs" style={{ color: SF.text }}>© {new Date().getFullYear()} StatusForge. All rights reserved.</p>
         <p className="text-xs" style={{ color: SF.text }}>Motto: <span className="italic text-white">Authority, Engineered.</span></p>
@@ -349,6 +465,9 @@ function Footer() {
 export default function StatusForgeOnePageSite() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: SF.bg, color: "#fff", fontFamily: 'Inter, ui-sans-serif, system-ui' }}>
+      {/* Load Fillout embed script */}
+      <FilloutScript />
+
       <Navbar />
       <Hero />
       <Services />
