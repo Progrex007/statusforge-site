@@ -284,7 +284,7 @@ function Packages() {
     "Authority Content Flood (LinkedIn, Medium, Google News)",
     "Google visibility engineering (SEO, Knowledge Panel)",
     "AI ghostwriting (blogs, insights, commentary)",
-    "Press distribution (ethical, real mentions)",
+    "Press distribution",
     "Personal website linked to blog posts (dynamic authority hub)",
     "Optional add-on: Local Authority Visibility (Wi-Fi splash ads)",
   ];

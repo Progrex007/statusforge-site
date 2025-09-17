@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://statusforge.co.za/sitemap.xml
