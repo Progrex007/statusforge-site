@@ -1,0 +1,5 @@
+{
+  "routes": [
+    { "src": "^/vite\\.svg$", "status": 410 }
+  ]
+}
