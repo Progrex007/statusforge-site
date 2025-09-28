@@ -105,7 +105,7 @@ function Hero({ slides = heroSlidesDefault }) {
               <a href="#packages" className="rounded-md px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 focus:outline-none focus:ring-2" style={{ backgroundColor: SF.gold, color: "#0b0b0c", boxShadow: "0 10px 30px rgba(238,183,93,0.25)" }}>See Packages</a>
               <a href="#services" className="rounded-md border px-5 py-3 text-sm font-medium transition hover:bg-white/5" style={{ borderColor: "#2a2a2a", color: "#ffffff" }}>How it works</a>
             </div>
-            <p className="mt-6 text-xs" style={{ color: SF.text }}>We accept up to <span className="font-semibold text-white">5 clients per area</span> to protect exclusivity.</p>
+            <p className="mt-6 text-xs" style={{ color: SF.text }}>Limited seats <span className="font-semibold text-white">per area</span> to protect your advantage.</p>
           </div>
 
           <div className="lg:col-span-6">
@@ -196,7 +196,7 @@ function Services() {
   );
 }
 
-/* ==== Packages (ONLY change: center text on Premium & Ultra buttons) ==== */
+/* ==== Packages (UPDATED TO YOUR LATEST PLAN) ==== */
 function PackageCard({ title, price, period, bullets, cta = "Choose", featured = false, whiteText = false }) {
   const isGetStarted = cta === "Get Started";
   const baseText = whiteText ? "#ffffff" : "#111111";
@@ -257,7 +257,6 @@ function PackageCard({ title, price, period, bullets, cta = "Choose", featured =
           Get Started
         </button>
       ) : (
-        /* CHANGE APPLIES HERE: make anchor an inline-flex with centered text */
         <a
           href="#contact"
           className="mt-6 inline-flex justify-center items-center rounded-md px-4 py-2 text-sm font-semibold text-center"
@@ -271,31 +270,38 @@ function PackageCard({ title, price, period, bullets, cta = "Choose", featured =
 }
 
 function Packages() {
-  const starter = [
-    "Personal brand website (1-page, hero carousel)",
-    "AI-Powered Personal Brand Audit ",
-    "14-Day AI Content Sprint (daily posts)",
-    "Social Media profile optimization",
+  // UPDATED bullets per your latest plan
+  const starterBullets = [
+    "Personal Website",
+    "Google Business Profile",
+    "Mini Brand Audit",
+    "1 Social Media Profile Optimization",
+    "3 Days Content Sprint",
+    "Authority Post on Medium",
     "Basic Web Discovery",
   ];
 
-  const premium = [
+  const premiumBullets = [
     "Everything in Starter",
-    "Authority Content Flood (LinkedIn, Medium, Google News)",
-    "Google visibility engineering (SEO, Knowledge Panel)",
-    "AI ghostwriting (blogs, insights, commentary)",
-    "Press distribution",
-    "Personal website linked to blog posts (dynamic authority hub)",
-    "Optional add-on: Local Authority Visibility (Wi-Fi splash ads)",
+    "Enhanced Website Update",
+    "Prestige Shoot (Videographer)",
+    "Authority Content Flood (IG, LinkedIn, TikTok)",
+    "Press Distribution (Quarterly)",
+    "Ghostwriting SEO Blogs & Insights",
+    "Lead Capture",
+    "Auto-reply System",
+    "Prestige Identity Smart Card",
+    "Google Visibility Engineering",
   ];
 
-  const ultra = [
+  const ultraBullets = [
     "Everything in Premium",
-    "Exclusive multi-venue Wi-Fi takeovers",
-    "Prestige digital billboards (with social proof content)",
-    "High-authority press features (national / niche real estate)",
-    "Video authority assets (AI-enhanced interviews & reels)",
-    "Smart Open House Wi-Fi (property splash with virtual tour)",
+    "Cinematic Videography",
+    "Exclusive Press Mentions",
+    "Digital Billboard Ads",
+    "High-Authority Press Features",
+    "Video Authority Assets",
+    "Reputation Management & SERP Control",
   ];
 
   return (
@@ -310,32 +316,32 @@ function Packages() {
             Pick your path to authority
           </h2>
           <p className="mt-3 text-neutral-600">
-            Starter → credible online. Premium → authority everywhere. Ultra → untouchable celebrity realtor.
+            Starter → credible online. Premium → authority everywhere. Ultra → untouchable.
           </p>
         </div>
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
           <PackageCard
-            title="Starter – Credible Online"
-            price="R2,500"
+            title="Starter — Credible Online"
+            price="R3,500"
             period="once-off"
-            bullets={starter}
+            bullets={starterBullets}
             cta="Get Started"
           />
           <PackageCard
-            title="Premium – Authority Everywhere"
-            price="R6,500"
+            title="Premium — Authority Everywhere"
+            price="R8,000"
             period="per month"
-            bullets={premium}
+            bullets={premiumBullets}
             featured
             cta="Enroll Premium"
             whiteText
           />
           <PackageCard
-            title="Ultra-Prestige – Untouchable Authority"
+            title="Ultra Prestige — Untouchable"
             price="By Invite Only"
             period=""
-            bullets={ultra}
-            cta="Apply for Ultra"
+            bullets={ultraBullets}
+            cta="Request Invite"
           />
         </div>
       </div>
@@ -356,7 +362,7 @@ function Testimonials() {
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           <div className="rounded-2xl border bg-white p-6 shadow-sm">
-            <div className="text-sm text-neutral-700">“Within two weeks, my Google results looked like I’d been in the game for years. The audit + one-page site landed me two exclusive mandates in Paulshof.”</div>
+            <div className="text-sm text-neutral-700">“Within two weeks, my Google results looked like I’d been in the game for years. My personal website showcased my portfolio and landed me two exclusive mandates in Paulshof.”</div>
             <div className="mt-4 flex items-center gap-3">
               <div className="h-9 w-9 rounded-full bg-neutral-200" />
               <div>
@@ -376,7 +382,7 @@ function Testimonials() {
             </div>
           </div>
           <div className="rounded-2xl border bg-white p-6 shadow-sm">
-            <div className="text-sm text-neutral-700">“StatusForge made me the face of my suburb. The Wi-Fi splash ads + authority content mean people already ‘know me’ before we meet.”</div>
+            <div className="text-sm text-neutral-700">“The Smart Card completely changed the way I connect with clients. Instead of handing out old-fashioned business cards, I just tap my card and my personal brand contents pops up instantly on their phone. It feels premium, futuristic, and professional. My clients always say, ‘Wow, I’ve never seen that before.’ It’s not just a card, it’s a conversation starter that makes me unforgettable.”</div>
             <div className="mt-4 flex items-center gap-3">
               <div className="h-9 w-9 rounded-full bg-neutral-200" />
               <div>
@@ -453,7 +459,6 @@ function Contact() {
 function Footer() {
   return (
     <footer className="border-t border-white/10" style={{ backgroundColor: SF.bg }}>
-      {/* Note: per your request, the bottom Get Started button was removed */}
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row">
         <p className="text-xs" style={{ color: SF.text }}>© {new Date().getFullYear()} StatusForge. All rights reserved.</p>
         <p className="text-xs" style={{ color: SF.text }}>Motto: <span className="italic text-white">Authority, Engineered.</span></p>
