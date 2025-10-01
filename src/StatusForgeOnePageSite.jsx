@@ -15,15 +15,25 @@ import { AnimatePresence, motion } from "framer-motion";
  */
 
 const SF = {
-  bg: "#181818", // dark hero background
-  gold: "#eeb75d", // unified accent
-  text: "#b0b0b0", // small text on dark
-  paper: "#f1efeb", // services section bg
+  bg: "#181818",
+  gold: "#eeb75d",
+  text: "#b0b0b0",
+  paper: "#f1efeb",
+};
+
+// === YOUR MEDIA LINKS (edit here) ===
+const LINKS = {
+  linkedin: "https://linkedin.com/company/statusforge-za",
+  instagram: "https://instagram.com/statusforge_za",
+  medium: "https://medium.com/@hello_51218",
+  website: "https://statusforge.co.za/",
+  logo: "/logo.png",
+  og: "/og-cover.jpg",
 };
 
 const heroSlidesDefault = [
-  { src: "/images/hero-1.jpg", alt: "Prestige modern home exterior at dusk", caption: "Authority, Engineered." },
-  { src: "/images/hero-2.jpg", alt: "Elegant interior with natural light", caption: "Built for South African pros" },
+  { src: "/images/hero-1.jpg", alt: "prestige realtor website mockup — credibility engineering example", caption: "Authority, Engineered." },
+  { src: "/images/hero-2.jpg", alt: "authority profile optimization — LinkedIn South Africa", caption: "Built for South African pros" },
 ];
 
 /* === Load Fillout embed script once (no plugins) === */
@@ -39,6 +49,70 @@ function FilloutScript() {
   return null;
 }
 
+/* === Brand JSON-LD + minimal meta injection (SPA-friendly) === */
+function SeoHead() {
+  useEffect(() => {
+    // Title + Description (best set in index.html, but this helps for SPA)
+    document.title = "StatusForge | Authority, Engineered — Status-as-a-Service & Credibility Engineering (South Africa)";
+    const setMeta = (name, content) => {
+      let m = document.querySelector(`meta[name="${name}"]`);
+      if (!m) {
+        m = document.createElement("meta");
+        m.setAttribute("name", name);
+        document.head.appendChild(m);
+      }
+      m.setAttribute("content", content);
+    };
+    setMeta("description", "StatusForge is South Africa’s first Status-as-a-Service™. We engineer credibility, authority and digital prestige for realtors and SA professionals. Ethical credibility signals, 14-day authority sprints, and prestige websites.");
+
+    // Open Graph (basic)
+    const setOG = (property, content) => {
+      let m = document.querySelector(`meta[property="${property}"]`);
+      if (!m) {
+        m = document.createElement("meta");
+        m.setAttribute("property", property);
+        document.head.appendChild(m);
+      }
+      m.setAttribute("content", content);
+    };
+    setOG("og:type", "website");
+    setOG("og:title", "StatusForge — Authority, Engineered");
+    setOG("og:description", "Credibility engineering & Status-as-a-Service™ for South African professionals.");
+    setOG("og:url", LINKS.website);
+    setOG("og:image", LINKS.og);
+
+    // JSON-LD sameAs
+    if (!document.getElementById("sf-jsonld")) {
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.id = "sf-jsonld";
+      script.text = JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "name": "StatusForge",
+            "url": LINKS.website,
+            "logo": LINKS.logo,
+            "slogan": "Authority, Engineered.",
+            "sameAs": [LINKS.linkedin, LINKS.instagram, LINKS.medium],
+          },
+          {
+            "@type": "Service",
+            "name": "Status-as-a-Service™",
+            "serviceType": "Credibility Engineering & Online Authority",
+            "provider": { "@type": "Organization", "name": "StatusForge", "url": LINKS.website },
+            "areaServed": { "@type": "Country", "name": "South Africa" },
+            "description": "Engineering credibility, authority and prestige presence for South African professionals with ethical credibility signals and 14-day authority sprints."
+          }
+        ]
+      });
+      document.head.appendChild(script);
+    }
+  }, []);
+  return null;
+}
+
 /* Reusable props for any "Get Started" popup button */
 const filloutAttrs = {
   "data-fillout-id": "ifDkXUT9ygus",
@@ -48,12 +122,63 @@ const filloutAttrs = {
   "data-fillout-popup-size": "medium",
 };
 
+/* === Social Icons (no external deps) === */
+function IconLinkedIn(props) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+      <path fill="currentColor" d="M6.94 8.5H4V20h2.94V8.5zM5.47 7.12a1.71 1.71 0 1 0 0-3.42 1.71 1.71 0 0 0 0 3.42zM20 20h-2.93v-5.59c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.13 1.45-2.13 2.94V20H10.1V8.5h2.81v1.57h.04c.39-.73 1.36-1.5 2.8-1.5 2.99 0 3.54 1.97 3.54 4.54V20z"/>
+    </svg>
+  );
+}
+function IconInstagram(props) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+      <path fill="currentColor" d="M12 7.2A4.8 4.8 0 1 0 16.8 12 4.81 4.81 0 0 0 12 7.2Zm0 7.9A3.1 3.1 0 1 1 15.1 12 3.1 3.1 0 0 1 12 15.1ZM17.7 6.3a1.12 1.12 0 1 0 1.12 1.12 1.12 1.12 0 0 0-1.12-1.12ZM21.7 7.4a6.53 6.53 0 0 0-1.78-4.62A6.53 6.53 0 0 0 15.3 1H8.7a6.53 6.53 0 0 0-4.62 1.78A6.53 6.53 0 0 0 2.3 7.4v6.6a6.53 6.53 0 0 0 1.78 4.62A6.53 6.53 0 0 0 8.7 20.4h6.6a6.53 6.53 0 0 0 4.62-1.78 6.53 6.53 0 0 0 1.78-4.62Zm-2.2 6.6a4.33 4.33 0 0 1-4.3 4.3H8.8a4.33 4.33 0 0 1-4.3-4.3V8.8a4.33 4.33 0 0 1 4.3-4.3h6.4a4.33 4.33 0 0 1 4.3 4.3Z"/>
+    </svg>
+  );
+}
+function IconMedium(props) {
+  return (
+    <svg viewBox="0 0 1043.63 592.71" aria-hidden="true" {...props}>
+      <path fill="currentColor" d="M588.67 296.35c0 163.66-131.36 296.35-293.88 296.35S0.92 460 0.92 296.35 132.28 0 294.79 0 588.67 132.69 588.67 296.35zm309.54 0c0 154.49-65.68 279.82-146.71 279.82S604.8 450.84 604.8 296.35 670.49 16.53 751.52 16.53s146.69 125.33 146.69 279.82zm145.42 0c0 144.04-27.58 260.88-61.61 260.88s-61.61-116.84-61.61-260.88S947.98 35.46 982.01 35.46s61.61 116.84 61.61 260.88z"/>
+    </svg>
+  );
+}
+
+/* === Reusable Social Links Row === */
+function SocialRow({ className = "" }) {
+  const aBase = "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2";
+  const iconCls = "h-4 w-4";
+  return (
+    <div className={`flex flex-wrap items-center gap-3 ${className}`}>
+      <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="StatusForge on LinkedIn"
+         className={aBase}
+         style={{ backgroundColor: "#ffffff12", color: "#fff", border: "1px solid #2a2a2a" }}>
+        <IconLinkedIn className={iconCls} />
+        LinkedIn
+      </a>
+      <a href={LINKS.instagram} target="_blank" rel="noopener noreferrer" aria-label="StatusForge on Instagram"
+         className={aBase}
+         style={{ backgroundColor: "#ffffff12", color: "#fff", border: "1px solid #2a2a2a" }}>
+        <IconInstagram className={iconCls} />
+        Instagram
+      </a>
+      <a href={LINKS.medium} target="_blank" rel="noopener noreferrer" aria-label="StatusForge on Medium"
+         className={aBase}
+         style={{ backgroundColor: "#ffffff12", color: "#fff", border: "1px solid #2a2a2a" }}>
+        <IconMedium className={iconCls} />
+        Medium
+      </a>
+    </div>
+  );
+}
+
 function Navbar() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/5">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <a href="#top" className="group inline-flex items-center gap-2">
-          <img src="/logo.png" alt="StatusForge Logo" className="h-7 w-7 rounded-md" />
+          <img src={LINKS.logo} alt="StatusForge Logo" className="h-7 w-7 rounded-md" />
           <span className="font-semibold tracking-tight text-white" style={{ fontFamily: 'Playfair Display, serif' }}>StatusForge</span>
         </a>
         <nav className="hidden items-center gap-8 md:flex">
@@ -62,7 +187,6 @@ function Navbar() {
           <a href="#about" className="text-sm" style={{ color: SF.text }}>About</a>
           <a href="#contact" className="text-sm" style={{ color: SF.text }}>Contact</a>
         </nav>
-        {/* Book a Call -> Get Started (direct Fillout popup trigger) */}
         <button
           type="button"
           {...filloutAttrs}
@@ -196,7 +320,7 @@ function Services() {
   );
 }
 
-/* ==== Packages (UPDATED TO YOUR LATEST PLAN) ==== */
+/* ==== Packages ==== */
 function PackageCard({ title, price, period, bullets, cta = "Choose", featured = false, whiteText = false }) {
   const isGetStarted = cta === "Get Started";
   const baseText = whiteText ? "#ffffff" : "#111111";
@@ -270,13 +394,13 @@ function PackageCard({ title, price, period, bullets, cta = "Choose", featured =
 }
 
 function Packages() {
-  // UPDATED bullets per your latest plan
   const starterBullets = [
     "Personal Website",
     "Google Business Profile",
     "Mini Brand Audit",
-    "1 Social Media Profile Optimization",
-    "3 Days Content Sprint",
+    "Social Media Profile Optimization",
+    "Lead Capture",
+    "14 Days Authority Sprint",
     "Authority Post on Medium",
     "Basic Web Discovery",
   ];
@@ -286,9 +410,7 @@ function Packages() {
     "Enhanced Website Update",
     "Prestige Shoot (Videographer)",
     "Authority Content Flood (IG, LinkedIn, TikTok)",
-    "Press Distribution (Quarterly)",
     "Ghostwriting SEO Blogs & Insights",
-    "Lead Capture",
     "Auto-reply System",
     "Prestige Identity Smart Card",
     "Google Visibility Engineering",
@@ -298,6 +420,7 @@ function Packages() {
     "Everything in Premium",
     "Cinematic Videography",
     "Exclusive Press Mentions",
+    "Lead Nurturing",
     "Digital Billboard Ads",
     "High-Authority Press Features",
     "Video Authority Assets",
@@ -322,7 +445,7 @@ function Packages() {
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
           <PackageCard
             title="Starter — Credible Online"
-            price="R3,500"
+            price="R4,000"
             period="once-off"
             bullets={starterBullets}
             cta="Get Started"
@@ -348,7 +471,6 @@ function Packages() {
     </section>
   );
 }
-/* ==== End Packages ==== */
 
 function Testimonials() {
   return (
@@ -406,16 +528,26 @@ function About() {
             <h2 className="text-3xl font-semibold text-neutral-900" style={{ fontFamily: 'Playfair Display, serif' }}>About StatusForge</h2>
             <p className="mt-3 text-neutral-700">StatusForge is South Africa’s first <span className="font-medium">Status-as-a-Service™</span> brand. We engineer credibility, authority, and digital prestige so ambitious professionals look like market leaders — fast and ethically. Our motto: <span className="italic">Authority, Engineered.</span></p>
             <p className="mt-3 text-neutral-700">We work with a limited number of clients per area to protect exclusivity and outcomes.</p>
+
+            {/* Follow us row (subtle) */}
+            <div className="mt-6">
+              <p className="text-sm text-neutral-600 mb-2">Follow our authority insights:</p>
+              <div className="flex flex-wrap gap-2">
+                <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm underline decoration-neutral-300 underline-offset-4 hover:text-neutral-900">LinkedIn</a>
+                <span className="text-neutral-400">•</span>
+                <a href={LINKS.medium} target="_blank" rel="noopener noreferrer" className="text-sm underline decoration-neutral-300 underline-offset-4 hover:text-neutral-900">Medium</a>
+                <span className="text-neutral-400">•</span>
+                <a href={LINKS.instagram} target="_blank" rel="noopener noreferrer" className="text-sm underline decoration-neutral-300 underline-offset-4 hover:text-neutral-900">Instagram</a>
+              </div>
+            </div>
           </div>
+
           <div className="rounded-2xl border bg-white p-6 shadow-sm">
             <h3 className="text-lg font-semibold" style={{ fontFamily: 'Playfair Display, serif' }}>What makes us different</h3>
             <ul className="mt-3 space-y-2 text-sm text-neutral-700">
-              <li className="flex items-start gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5"><path d="M20 7L9 18l-5-5" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>Unified status engineering (not traditional PR)
-              </li>
-              <li className="flex items-start gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5"><path d="M20 7L9 18l-5-5" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>Localised for SA markets & platforms
-              </li>
-              <li className="flex items-start gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5"><path d="M20 7L9 18l-5-5" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>Ethical, transparent credibility signals (no fake logos)
-              </li>
+              <li className="flex items-start gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5"><path d="M20 7L9 18l-5-5" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>Unified status engineering (not traditional PR)</li>
+              <li className="flex items-start gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5"><path d="M20 7L9 18l-5-5" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>Localised for SA markets & platforms</li>
+              <li className="flex items-start gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5"><path d="M20 7L9 18l-5-5" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>Ethical, transparent credibility signals (no fake logos)</li>
             </ul>
           </div>
         </div>
@@ -447,7 +579,7 @@ function Contact() {
                 <li className="flex items-start gap-2"><span className="mt-1 inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: SF.gold }}></span> 14-day plan with deliverables & timeline</li>
                 <li className="flex items-start gap-2"><span className="mt-1 inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: SF.gold }}></span> If we’re aligned, we start within 7 days</li>
               </ul>
-              <p className="mt-4 text-xs" style={{ color: SF.text }}>Availability is limited — we work with up to 5 clients per area.</p>
+              <p className="mt-4 text-xs" style={{ color: SF.text }}>Availability is limited.</p>
             </div>
           </div>
         </div>
@@ -459,9 +591,27 @@ function Contact() {
 function Footer() {
   return (
     <footer className="border-t border-white/10" style={{ backgroundColor: SF.bg }}>
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row">
-        <p className="text-xs" style={{ color: SF.text }}>© {new Date().getFullYear()} StatusForge. All rights reserved.</p>
-        <p className="text-xs" style={{ color: SF.text }}>Motto: <span className="italic text-white">Authority, Engineered.</span></p>
+      <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+          <div className="flex items-center gap-3">
+            <img src={LINKS.logo} alt="StatusForge Logo" className="h-7 w-7 rounded-md" />
+            <div>
+              <p className="text-sm text-white font-semibold" style={{ fontFamily: 'Playfair Display, serif' }}>StatusForge</p>
+              <p className="text-xs" style={{ color: SF.text }}>Motto: <span className="italic text-white">Authority, Engineered.</span></p>
+            </div>
+          </div>
+
+          {/* Social buttons */}
+          <SocialRow />
+
+        </div>
+
+        <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 md:flex-row">
+          <p className="text-xs" style={{ color: SF.text }}>© {new Date().getFullYear()} StatusForge. All rights reserved.</p>
+          <p className="text-xs" style={{ color: SF.text }}>
+            Built in South Africa • <a href={LINKS.website} className="underline underline-offset-4">statusforge.co.za</a>
+          </p>
+        </div>
       </div>
     </footer>
   );
@@ -472,6 +622,8 @@ export default function StatusForgeOnePageSite() {
     <div className="min-h-screen" style={{ backgroundColor: SF.bg, color: "#fff", fontFamily: 'Inter, ui-sans-serif, system-ui' }}>
       {/* Load Fillout embed script */}
       <FilloutScript />
+      {/* Inject basic SEO + JSON-LD */}
+      <SeoHead />
 
       <Navbar />
       <Hero />
